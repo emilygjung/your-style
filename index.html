@@ -47,7 +47,7 @@
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
+      gap: 15px;
       flex: 1;
       overflow-y: auto;
     }
@@ -196,30 +196,27 @@
   <script>
     const data = [
       { name: "HomeStretch™ Rib Kickback Pant", price: 68, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/HomeStretch_Rib_Kickback_Pant_-_rich_mocha_brown_aw5tb2.avif", new: false },
-      { name: "Original Contour Ravish Top", price: 58, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Original_Contour_Ravish_Top_-_rich_mocha_brown_xuapbv.avif", new: false },
-      { name: "Heritage Merino Wool 1/4 Zip Hi-Hip Sweater", price: 138, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Heritage_Merino_Wool_1_4_Zip_Hi-Hip_Sweater_-_heather_charcoal_tulhi1.avif", new: false },
-      { name: "Olive Micro Skirt", price: 88, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Olive_Micro_Skirt_-_heather_charcoal_v7sm4k.avif", new: false },
-      { name: "Smooth Matter™ Tower Top", price: 48, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702607/Smooth_Matter_Tower_Top_-_black_vvalrp.avif", new: false },
-      { name: "Fitted Crew Neck T-Shirt", price: 38, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702607/Smooth_Matter_Tower_Top_-_black_vvalrp.avif", new: false },
-      { name: "Relaxed Linen Tank", price: 52, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Original_Contour_Ravish_Top_-_rich_mocha_brown_xuapbv.avif", new: false },
-      { name: "Classic White Button-Up", price: 78, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702607/Smooth_Matter_Tower_Top_-_black_vvalrp.avif", new: false },
-      { name: "Charcoal Wide-Leg Trousers", price: 95, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Olive_Micro_Skirt_-_heather_charcoal_v7sm4k.avif", new: false },
-      { name: "Wilfred Endnote Pant", price: 138, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Wilfred_Endnote_Pant_-_black_xgxghh.avif", new: true },
-      { name: "Wilfred Calligraphy Top", price: 98, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Wilfred_Calligraphy_Top_-_black_bzqrey.avif", new: true },
-      { name: "Serif Satin Camisole", price: 110, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Serif_Satin_Camisole_-_black_ivqnhs.avif", new: true },
-      { name: "Henrietta Satin Skirt", price: 148, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Henrietta_Satin_Skirt_-_rich_mocha_brown_black_tgrhuj.avif", new: true },
-      { name: "Slip Satin Maxi Skirt", price: 98, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Slip_Satin_Maxi_Skirt_-_matte_pearl_g1xct8.avif", new: true },
-      { name: "Element Tube Top - (Re)ssential", price: 110, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Element_Tube_Top_-_Re_ssential_-_rich_mocha_brown_rbhcug.avif", new: true },
-      { name: "Element Tube Top - (Re)ssential", price: 110, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Element_Tube_Top_-_Re_ssential_-_heather_dark_grey_zdaznx.avif", new: true },
-      { name: "New Agency Pant - (Re)ssential", price: 148, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/New_Agency_Pant_-_Re_ssential_-_black_t1wibh.avif", new: true },
-      { name: "New Agency Pant - (Re)ssential", price: 148, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/New_Agency_Pant_-_Re_ssential_-_heather_dark_grey_kvcpf4.avif", new: true },
-      { name: "Denim Forum The '90s Iggy Lo-Rise Baggy Jean", price: 110, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Denim_Forum_The_90s_Iggy_Lo-Rise_Baggy_Jean_-_7_yrs_bleu_taboo_rwmta2.avif", new: true },
-      { name: "Whisper Halter Top - Crepette™", price: 98, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Whisper_Halter_Top_-_Crepette_-_folio_brown_ku3ejx.avif", new: true },
-      { name: "Rae Bomber - Leather", price: 598, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Rae_Bomber_-_Leather_-_black_xt8asu.avif", new: true },
-      { name: "Golightly Cardigan - Wonder Yarn", price: 118, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Golightly_Cardigan_-_Wonder_Yarn_-_light_birch_dhfnvt.avif", new: true },
-      { name: "Martini Satin Halter Blouse", price: 88, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Martini_Satin_Halter_Blouse_-_dark_night_nay_n67qni.avif", new: true },
-      { name: "Martini Satin Halter Blouse", price: 88, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Martini_Satin_Halter_Blouse_-_marmont_i7ipmk.avif", new: true },
-      { name: "The Lodge Pant™ - Satin", price: 138, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Element_Tube_Top_-_Re_ssential_-_heather_dark_grey_zdaznx.avif", new: true }
+      { name: "Original Contour Ravish Top - Brown", price: 58, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Original_Contour_Ravish_Top_-_rich_mocha_brown_xuapbv.avif", new: false },
+      { name: "Heritage Merino Sweater - Charcoal", price: 138, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Heritage_Merino_Wool_1_4_Zip_Hi-Hip_Sweater_-_heather_charcoal_tulhi1.avif", new: false },
+      { name: "Olive Micro Skirt - Charcoal", price: 88, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Olive_Micro_Skirt_-_heather_charcoal_v7sm4k.avif", new: false },
+      { name: "Smooth Matter™ Tower Top - Black", price: 48, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702607/Smooth_Matter_Tower_Top_-_black_vvalrp.avif", new: false },
+      { name: "Oversized Linen Shirt - White", price: 65, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Original_Contour_Ravish_Top_-_rich_mocha_brown_xuapbv.avif", new: false },
+      { name: "Fitted Crew Neck Tee - Black", price: 38, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Whisper_Halter_Top_-_Crepette_-_folio_brown_ku3ejx.avif", new: false },
+      { name: "Wilfred Endnote Pant - Black", price: 138, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Wilfred_Endnote_Pant_-_black_xgxghh.avif", new: true },
+      { name: "Serif Satin Camisole - Black", price: 110, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Serif_Satin_Camisole_-_black_ivqnhs.avif", new: true },
+      { name: "Henrietta Satin Skirt - Mocha", price: 148, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Henrietta_Satin_Skirt_-_rich_mocha_brown_black_tgrhuj.avif", new: true },
+      { name: "Slip Satin Maxi Skirt - Pearl", price: 98, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Slip_Satin_Maxi_Skirt_-_matte_pearl_g1xct8.avif", new: true },
+      { name: "Element Tube Top - Mocha", price: 110, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Element_Tube_Top_-_Re_ssential_-_rich_mocha_brown_rbhcug.avif", new: true },
+      { name: "Element Tube Top - Grey", price: 110, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Element_Tube_Top_-_Re_ssential_-_heather_dark_grey_zdaznx.avif", new: true },
+      { name: "New Agency Pant - Black", price: 148, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/New_Agency_Pant_-_Re_ssential_-_black_t1wibh.avif", new: true },
+      { name: "New Agency Pant - Grey", price: 148, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/New_Agency_Pant_-_Re_ssential_-_heather_dark_grey_kvcpf4.avif", new: true },
+      { name: "Denim Baggy Jean - Blue", price: 110, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Denim_Forum_The_90s_Iggy_Lo-Rise_Baggy_Jean_-_7_yrs_bleu_taboo_rwmta2.avif", new: true },
+      { name: "Whisper Halter Top - Brown", price: 98, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Whisper_Halter_Top_-_Crepette_-_folio_brown_ku3ejx.avif", new: true },
+      { name: "Rae Leather Bomber - Black", price: 598, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Rae_Bomber_-_Leather_-_black_xt8asu.avif", new: true },
+      { name: "Golightly Cardigan - Light Birch", price: 118, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Golightly_Cardigan_-_Wonder_Yarn_-_light_birch_dhfnvt.avif", new: true },
+      { name: "Martini Halter Blouse - Navy", price: 88, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Martini_Satin_Halter_Blouse_-_dark_night_nay_n67qni.avif", new: true },
+      { name: "Martini Halter Blouse - Maroon", price: 88, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702604/Martini_Satin_Halter_Blouse_-_marmont_i7ipmk.avif", new: true },
+      { name: "Lodge Satin Pant - Olive", price: 138, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Element_Tube_Top_-_Re_ssential_-_heather_dark_grey_zdaznx.avif", new: true }
     ];
 
     let sel = { top: null, bottom: null, jacket: null };
@@ -286,9 +283,14 @@
       btn.disabled = true;
 
       try {
-        const topName = sel.top ? sel.top.name : '';
-        const bottomName = sel.bottom ? sel.bottom.name : '';
-        const desc = `A luxury fashion photo of a woman wearing a ${topName} with a ${bottomName}. Studio lighting, white background, full-body shot, professional styling, confident pose.`;
+        const top = sel.top;
+        const bottom = sel.bottom;
+        
+        // Extract color from item names when possible
+        const topDesc = top.name;
+        const bottomDesc = bottom.name;
+        
+        const desc = `Professional luxury fashion photograph. Woman wearing ${topDesc} styled with ${bottomDesc}. Studio lighting, neutral background, full-body shot from waist up, confident relaxed pose, warm skin tone, high-end fashion magazine style.`;
         
         const response = await fetch('/.netlify/functions/generate-image', {
           method: 'POST',
