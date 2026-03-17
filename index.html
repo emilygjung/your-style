@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,15 +47,15 @@
     
     .grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
       flex: 1;
       overflow-y: auto;
     }
     
     .item {
       cursor: pointer;
-      aspect-ratio: 2/3;
+      aspect-ratio: 1/1.2;
       background: white;
       border: 2px solid transparent;
       border-radius: 4px;
@@ -96,7 +97,7 @@
     
     .model {
       width: 100%;
-      aspect-ratio: 2/3;
+      aspect-ratio: 1/1.5;
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 4px;
@@ -218,38 +219,50 @@
       { name: "The Lodge Pant™ - Satin", price: 138, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Element_Tube_Top_-_Re_ssential_-_heather_dark_grey_zdaznx.avif", new: true }
     ];
 
-    let sel = { top: null, bottom: null };
+    let sel = { tops: [], bottoms: [] };
 
     function render() {
       const closet = data.filter(p => !p.new);
       const news = data.filter(p => p.new);
       
-      document.getElementById('closet').innerHTML = closet.map(p => `
-        <div class="item ${sel[p.type]?.name === p.name ? 'active' : ''}" 
+      document.getElementById('closet').innerHTML = closet.map(p => {
+        const isSelected = sel[p.type === 'top' ? 'tops' : 'bottoms'].some(item => item.name === p.name);
+        return `
+        <div class="item ${isSelected ? 'active' : ''}" 
              style="background-image: url('${p.img}')"
              onclick="toggle('${p.name}', '${p.type}')">
           <div class="price">$${p.price}</div>
         </div>
-      `).join('');
+      `}).join('');
       
-      document.getElementById('new').innerHTML = news.map(p => `
-        <div class="item ${sel[p.type]?.name === p.name ? 'active' : ''}" 
+      document.getElementById('new').innerHTML = news.map(p => {
+        const isSelected = sel[p.type === 'top' ? 'tops' : 'bottoms'].some(item => item.name === p.name);
+        return `
+        <div class="item ${isSelected ? 'active' : ''}" 
              style="background-image: url('${p.img}')"
              onclick="toggle('${p.name}', '${p.type}')">
           <div class="price">$${p.price}</div>
         </div>
-      `).join('');
+      `}).join('');
     }
 
     function toggle(name, type) {
       const p = data.find(x => x.name === name && x.type === type);
-      sel[type] = sel[type]?.name === name ? null : p;
+      const key = type === 'top' ? 'tops' : 'bottoms';
+      const idx = sel[key].findIndex(x => x.name === name);
+      
+      if (idx > -1) {
+        sel[key].splice(idx, 1);
+      } else {
+        sel[key].push(p);
+      }
+      
       update();
       render();
     }
 
     function update() {
-      const items = Object.values(sel).filter(Boolean);
+      const items = [...sel.tops, ...sel.bottoms];
       const tot = items.reduce((s, i) => s + i.price, 0);
       
       document.getElementById('items').innerHTML = items.length 
@@ -261,7 +274,7 @@
     }
 
     async function generate() {
-      const items = Object.values(sel).filter(Boolean);
+      const items = [...sel.tops, ...sel.bottoms];
       if (items.length === 0) return;
 
       const model = document.getElementById('model');
@@ -272,7 +285,7 @@
       btn.disabled = true;
 
       try {
-        const desc = items.map(i => `${i.name} in the product color`).join(', ');
+        const desc = items.map(i => i.name).join(', ');
         const response = await fetch('/.netlify/functions/generate-image', {
           method: 'POST',
           body: JSON.stringify({ outfitDescription: desc })
@@ -285,10 +298,12 @@
           model.textContent = '';
           model.classList.remove('loading');
         } else {
-          model.textContent = `Error: ${result.error}`;
+          model.textContent = `Setup incomplete. Deploy generate-image.js first.`;
+          console.log('Prompt:', desc);
         }
       } catch (error) {
-        model.textContent = `Error: ${error.message}`;
+        model.textContent = `Setup incomplete. Deploy generate-image.js first.`;
+        console.log('Outfit:', items.map(i => i.name).join(', '));
       }
 
       btn.disabled = false;
