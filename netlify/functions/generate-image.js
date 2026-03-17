@@ -1,4 +1,3 @@
-
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return {
@@ -18,7 +17,7 @@ exports.handler = async (event) => {
       };
     }
 
-    // Step 1: Use GPT-4 Vision to analyze the product images
+    // Step 1: Use GPT-4 Turbo with Vision to analyze the product images
     const visionResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -26,7 +25,7 @@ exports.handler = async (event) => {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-4-vision-preview",
+        model: "gpt-4-turbo",
         max_tokens: 300,
         messages: [
           {
