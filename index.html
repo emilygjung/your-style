@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -97,7 +98,7 @@
     .model {
       width: 100%;
       aspect-ratio: 1/1.4;
-      background: white;
+      background: #f5f5f5;
       border: 1px solid #e0e0e0;
       border-radius: 4px;
       display: flex;
@@ -106,8 +107,42 @@
       color: #999;
       font-size: 14px;
       overflow: hidden;
-      background-size: cover;
-      background-position: center;
+      position: relative;
+    }
+    
+    .model-base {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #f9f9f9 0%, #f5f5f5 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .model-top {
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: auto;
+      max-height: 40%;
+      object-fit: contain;
+      z-index: 10;
+    }
+    
+    .model-bottom {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 75%;
+      height: auto;
+      max-height: 45%;
+      object-fit: contain;
+      z-index: 9;
     }
     
     .model.loading {
@@ -178,12 +213,18 @@
     <!-- CENTER: MODEL -->
     <div class="center">
       <div class="title">Your Outfit</div>
-      <div class="model" id="model">Select items</div>
+      <div class="model" id="model">
+        <div class="model-base">
+          <div style="color: #ccc; font-size: 12px;">Select items to preview</div>
+        </div>
+        <img id="model-top" class="model-top" style="display: none;">
+        <img id="model-bottom" class="model-bottom" style="display: none;">
+      </div>
       <div class="summary">
         <div id="items"></div>
         <div class="summary-price" id="price">$0</div>
       </div>
-      <button class="btn" id="btn" onclick="generate()" disabled>Generate</button>
+      <button class="btn" id="btn" onclick="updateMockup()" disabled>View Outfit</button>
     </div>
     
     <!-- RIGHT: NEW ARRIVALS -->
@@ -257,6 +298,7 @@
       
       update();
       render();
+      updateMockup();
     }
 
     function update() {
@@ -271,48 +313,27 @@
       document.getElementById('btn').disabled = items.length < 2;
     }
 
-    async function generate() {
+    function updateMockup() {
       const items = [sel.top, sel.bottom].filter(Boolean);
       if (items.length < 2) return;
 
-      const model = document.getElementById('model');
-      const btn = document.getElementById('btn');
+      const topImg = document.getElementById('model-top');
+      const bottomImg = document.getElementById('model-bottom');
       
-      model.textContent = 'Generating...';
-      model.classList.add('loading');
-      btn.disabled = true;
-
-      try {
-        const top = sel.top;
-        const bottom = sel.bottom;
-        
-        // Extract color from item names when possible
-        const topDesc = top.name;
-        const bottomDesc = bottom.name;
-        
-        const desc = `Professional luxury fashion photograph. Woman wearing ${topDesc} styled with ${bottomDesc}. Studio lighting, neutral background, full-body shot from waist up, confident relaxed pose, warm skin tone, high-end fashion magazine style.`;
-        
-        const response = await fetch('/.netlify/functions/generate-image', {
-          method: 'POST',
-          body: JSON.stringify({ outfitDescription: desc })
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          model.style.backgroundImage = `url('${result.url}')`;
-          model.textContent = '';
-          model.classList.remove('loading');
-        } else {
-          model.textContent = `Setup incomplete. Deploy generate-image.js first.`;
-          console.log('Prompt:', desc);
-        }
-      } catch (error) {
-        model.textContent = `Setup incomplete. Deploy generate-image.js first.`;
-        console.log('Outfit:', items.map(i => i.name).join(', '));
+      // Show/hide images
+      if (sel.top) {
+        topImg.src = sel.top.img;
+        topImg.style.display = 'block';
+      } else {
+        topImg.style.display = 'none';
       }
-
-      btn.disabled = false;
+      
+      if (sel.bottom) {
+        bottomImg.src = sel.bottom.img;
+        bottomImg.style.display = 'block';
+      } else {
+        bottomImg.style.display = 'none';
+      }
     }
 
     render();
