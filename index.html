@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +11,7 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #fafafa;
       color: #2a2a2a;
-      padding: 40px 20px;
+      padding: 60px 40px;
     }
     
     h1 {
@@ -25,16 +24,16 @@
     
     .layout {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 40px;
-      max-width: 2000px;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 50px;
+      max-width: 2200px;
       margin: 0 auto;
     }
     
     .col {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
     }
     
     .title {
@@ -97,7 +96,7 @@
     
     .model {
       width: 100%;
-      aspect-ratio: 1/1.5;
+      aspect-ratio: 1/1.4;
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 4px;
@@ -120,7 +119,7 @@
       background: white;
       border: 1px solid #e0e0e0;
       border-radius: 4px;
-      padding: 30px;
+      padding: 35px;
       text-align: center;
     }
     
@@ -201,6 +200,10 @@
       { name: "Heritage Merino Wool 1/4 Zip Hi-Hip Sweater", price: 138, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Heritage_Merino_Wool_1_4_Zip_Hi-Hip_Sweater_-_heather_charcoal_tulhi1.avif", new: false },
       { name: "Olive Micro Skirt", price: 88, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Olive_Micro_Skirt_-_heather_charcoal_v7sm4k.avif", new: false },
       { name: "Smooth Matter™ Tower Top", price: 48, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702607/Smooth_Matter_Tower_Top_-_black_vvalrp.avif", new: false },
+      { name: "Fitted Crew Neck T-Shirt", price: 38, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702607/Smooth_Matter_Tower_Top_-_black_vvalrp.avif", new: false },
+      { name: "Relaxed Linen Tank", price: 52, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Original_Contour_Ravish_Top_-_rich_mocha_brown_xuapbv.avif", new: false },
+      { name: "Classic White Button-Up", price: 78, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702607/Smooth_Matter_Tower_Top_-_black_vvalrp.avif", new: false },
+      { name: "Charcoal Wide-Leg Trousers", price: 95, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702612/Olive_Micro_Skirt_-_heather_charcoal_v7sm4k.avif", new: false },
       { name: "Wilfred Endnote Pant", price: 138, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Wilfred_Endnote_Pant_-_black_xgxghh.avif", new: true },
       { name: "Wilfred Calligraphy Top", price: 98, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Wilfred_Calligraphy_Top_-_black_bzqrey.avif", new: true },
       { name: "Serif Satin Camisole", price: 110, type: "top", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702606/Serif_Satin_Camisole_-_black_ivqnhs.avif", new: true },
@@ -219,14 +222,14 @@
       { name: "The Lodge Pant™ - Satin", price: 138, type: "bottom", img: "https://res.cloudinary.com/dy9gg97l0/image/upload/v1773702605/Element_Tube_Top_-_Re_ssential_-_heather_dark_grey_zdaznx.avif", new: true }
     ];
 
-    let sel = { tops: [], bottoms: [] };
+    let sel = { top: null, bottom: null, jacket: null };
 
     function render() {
       const closet = data.filter(p => !p.new);
       const news = data.filter(p => p.new);
       
       document.getElementById('closet').innerHTML = closet.map(p => {
-        const isSelected = sel[p.type === 'top' ? 'tops' : 'bottoms'].some(item => item.name === p.name);
+        const isSelected = sel[p.type] && sel[p.type].name === p.name;
         return `
         <div class="item ${isSelected ? 'active' : ''}" 
              style="background-image: url('${p.img}')"
@@ -236,7 +239,7 @@
       `}).join('');
       
       document.getElementById('new').innerHTML = news.map(p => {
-        const isSelected = sel[p.type === 'top' ? 'tops' : 'bottoms'].some(item => item.name === p.name);
+        const isSelected = sel[p.type] && sel[p.type].name === p.name;
         return `
         <div class="item ${isSelected ? 'active' : ''}" 
              style="background-image: url('${p.img}')"
@@ -248,13 +251,11 @@
 
     function toggle(name, type) {
       const p = data.find(x => x.name === name && x.type === type);
-      const key = type === 'top' ? 'tops' : 'bottoms';
-      const idx = sel[key].findIndex(x => x.name === name);
       
-      if (idx > -1) {
-        sel[key].splice(idx, 1);
+      if (sel[type] && sel[type].name === name) {
+        sel[type] = null;
       } else {
-        sel[key].push(p);
+        sel[type] = p;
       }
       
       update();
@@ -262,20 +263,20 @@
     }
 
     function update() {
-      const items = [...sel.tops, ...sel.bottoms];
+      const items = [sel.top, sel.bottom].filter(Boolean);
       const tot = items.reduce((s, i) => s + i.price, 0);
       
       document.getElementById('items').innerHTML = items.length 
         ? items.map(i => `<div class="summary-item">${i.name}</div>`).join('')
-        : '<div class="summary-item">No items</div>';
+        : '<div class="summary-item">No items selected</div>';
       
       document.getElementById('price').textContent = `$${tot}`;
-      document.getElementById('btn').disabled = items.length === 0;
+      document.getElementById('btn').disabled = items.length < 2;
     }
 
     async function generate() {
-      const items = [...sel.tops, ...sel.bottoms];
-      if (items.length === 0) return;
+      const items = [sel.top, sel.bottom].filter(Boolean);
+      if (items.length < 2) return;
 
       const model = document.getElementById('model');
       const btn = document.getElementById('btn');
@@ -285,7 +286,10 @@
       btn.disabled = true;
 
       try {
-        const desc = items.map(i => i.name).join(', ');
+        const topName = sel.top ? sel.top.name : '';
+        const bottomName = sel.bottom ? sel.bottom.name : '';
+        const desc = `A luxury fashion photo of a woman wearing a ${topName} with a ${bottomName}. Studio lighting, white background, full-body shot, professional styling, confident pose.`;
+        
         const response = await fetch('/.netlify/functions/generate-image', {
           method: 'POST',
           body: JSON.stringify({ outfitDescription: desc })
