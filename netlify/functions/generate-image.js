@@ -17,7 +17,7 @@ exports.handler = async (event) => {
       };
     }
 
-    // Step 1: Use GPT-4o with Vision to analyze the product images
+    // Step 1: Use GPT-4 Vision to analyze the product images
     const visionResponse = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -25,27 +25,23 @@ exports.handler = async (event) => {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-4o",
-        max_tokens: 300,
+        model: "gpt-4-turbo",
+        max_tokens: 200,
         messages: [
           {
             role: "user",
             content: [
               {
                 type: "text",
-                text: "Analyze these two fashion product images. Describe them in simple, clear terms focusing on: color, fabric/material appearance, style (casual/formal/etc), fit (loose/fitted/etc), and any distinctive features. Keep it very brief - just the essentials. Format: TOP: [description] BOTTOM: [description]"
+                text: "Describe these two fashion products in one sentence each. Focus on: color, material, style. Format exactly: TOP: [one sentence]. BOTTOM: [one sentence]. Be specific about colors and fabrics."
               },
               {
                 type: "image_url",
-                image_url: {
-                  url: topImg
-                }
+                image_url: { url: topImg, detail: "low" }
               },
               {
                 type: "image_url",
-                image_url: {
-                  url: bottomImg
-                }
+                image_url: { url: bottomImg, detail: "low" }
               }
             ]
           }
@@ -58,14 +54,14 @@ exports.handler = async (event) => {
     if (!visionResponse.ok) {
       return {
         statusCode: visionResponse.status,
-        body: JSON.stringify({ error: "Vision analysis failed", details: visionData })
+        body: JSON.stringify({ error: "Vision analysis failed", details: visionData.error })
       };
     }
 
     const description = visionData.choices[0].message.content;
 
-    // Step 2: Use the description to generate a realistic mockup with DALL-E
-    const dallePrompt = `Professional fashion photography of a woman wearing ${description}. Studio lighting, clean white background, full-body shot from head to feet, confident relaxed pose, warm skin tone, high-end fashion magazine editorial style. The outfit should look exactly as described.`;
+    // Step 2: Generate realistic mockup with DALL-E using the product descriptions
+    const dallePrompt = `Professional fashion photography. Create a realistic image of a woman modeling an outfit: ${description}. Full body shot, studio lighting, white background, confident pose, editorial fashion magazine style. Show the exact products as described.`;
 
     const dalleResponse = await fetch("https://api.openai.com/v1/images/generations", {
       method: "POST",
@@ -77,7 +73,8 @@ exports.handler = async (event) => {
         model: "dall-e-3",
         prompt: dallePrompt,
         n: 1,
-        size: "1024x1024"
+        size: "1024x1024",
+        quality: "standard"
       })
     });
 
