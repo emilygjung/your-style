@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -321,8 +320,8 @@
       fetch('/.netlify/functions/generate-image', {
         method: 'POST',
         body: JSON.stringify({
-          topImg: sel.top.img,
-          bottomImg: sel.bottom.img
+          topName: sel.top.name,
+          bottomName: sel.bottom.name
         })
       })
       .then(r => r.json())
@@ -347,3 +346,4 @@
   </script>
 </body>
 </html>
+
