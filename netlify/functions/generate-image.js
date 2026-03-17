@@ -1,6 +1,5 @@
+
 exports.handler = async (event) => {
-  console.log("Function called with body:", event.body);
-  
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -9,24 +8,67 @@ exports.handler = async (event) => {
   }
 
   try {
-    const { outfitDescription } = JSON.parse(event.body);
+    const { topImg, bottomImg } = JSON.parse(event.body);
     const apiKey = process.env.OPENAI_API_KEY;
-    
-    console.log("API Key exists:", !!apiKey);
-    console.log("Outfit description:", outfitDescription);
 
     if (!apiKey) {
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: "OPENAI_API_KEY not set in environment" })
+        body: JSON.stringify({ error: "API key not configured" })
       };
     }
 
-    const prompt = `Professional fashion photography: A woman wearing ${outfitDescription}. Studio lighting, white background, full body shot from thighs up, confident pose, warm skin tone, luxury fashion aesthetic.`;
-    
-    console.log("Prompt:", prompt);
+    // Step 1: Use GPT-4 Vision to analyze the product images
+    const visionResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4-vision-preview",
+        max_tokens: 300,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: "Analyze these two fashion product images. Describe them in simple, clear terms focusing on: color, fabric/material appearance, style (casual/formal/etc), fit (loose/fitted/etc), and any distinctive features. Keep it very brief - just the essentials. Format: TOP: [description] BOTTOM: [description]"
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: topImg
+                }
+              },
+              {
+                type: "image_url",
+                image_url: {
+                  url: bottomImg
+                }
+              }
+            ]
+          }
+        ]
+      })
+    });
 
-    const response = await fetch("https://api.openai.com/v1/images/generations", {
+    const visionData = await visionResponse.json();
+    
+    if (!visionResponse.ok) {
+      return {
+        statusCode: visionResponse.status,
+        body: JSON.stringify({ error: "Vision analysis failed", details: visionData })
+      };
+    }
+
+    const description = visionData.choices[0].message.content;
+
+    // Step 2: Use the description to generate a realistic mockup with DALL-E
+    const dallePrompt = `Professional fashion photography of a woman wearing ${description}. Studio lighting, clean white background, full-body shot from head to feet, confident relaxed pose, warm skin tone, high-end fashion magazine editorial style. The outfit should look exactly as described.`;
+
+    const dalleResponse = await fetch("https://api.openai.com/v1/images/generations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,30 +76,26 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         model: "dall-e-3",
-        prompt: prompt,
+        prompt: dallePrompt,
         n: 1,
         size: "1024x1024"
       })
     });
 
-    const data = await response.json();
-    
-    console.log("OpenAI response status:", response.status);
-    console.log("OpenAI response:", data);
+    const dalleData = await dalleResponse.json();
 
-    if (!response.ok) {
+    if (!dalleResponse.ok) {
       return {
-        statusCode: response.status,
-        body: JSON.stringify({ error: data.error?.message || "Generation failed" })
+        statusCode: dalleResponse.status,
+        body: JSON.stringify({ error: dalleData.error?.message || "Generation failed" })
       };
     }
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ url: data.data[0].url })
+      body: JSON.stringify({ url: dalleData.data[0].url })
     };
   } catch (error) {
-    console.error("Function error:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message })
