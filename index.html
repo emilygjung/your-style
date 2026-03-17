@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -314,7 +315,7 @@
       const model = document.getElementById('model');
       const btn = document.getElementById('btn');
       
-      model.innerHTML = '<div class="model-empty">Generating outfit...</div>';
+      model.innerHTML = '<div class="model-empty">Creating mockup...</div>';
       btn.disabled = true;
 
       fetch('/.netlify/functions/generate-image', {
@@ -330,11 +331,13 @@
           model.innerHTML = `<img src="${data.url}" style="width: 100%; height: 100%; object-fit: contain;">`;
         } else {
           model.innerHTML = '<div class="model-empty">Failed to generate</div>';
+          console.error('Error:', data);
         }
         btn.disabled = false;
       })
       .catch(err => {
-        model.innerHTML = '<div class="model-empty">Error generating outfit</div>';
+        model.innerHTML = '<div class="model-empty">Error generating mockup</div>';
+        console.error('Error:', err);
         btn.disabled = false;
       });
     }
